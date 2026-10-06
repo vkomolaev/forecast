@@ -1,28 +1,17 @@
 import type { City } from './types';
 
-export interface CityIndex {
-  keys: readonly string[];
-  cities: readonly City[];
-}
-
 const MIN_QUERY = 2;
 const LIMIT = 10;
 
 export const normalize = (text: string) =>
   text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
 
-// Expects cities sorted by normalized name, see scripts/build-cities.ts.
-export const createIndex = (cities: readonly City[]): CityIndex => ({
-  keys: cities.map((city) => normalize(city.name)),
-  cities,
-});
-
-const lowerBound = (keys: readonly string[], target: string, from = 0, to = keys.length): number => {
+const lowerBound = (cities: readonly City[], target: string, from = 0, to = cities.length): number => {
   if (from >= to) return from;
   const middle = (from + to) >>> 1;
-  return (keys[middle] ?? '') < target
-    ? lowerBound(keys, target, middle + 1, to)
-    : lowerBound(keys, target, from, middle);
+  return normalize(cities[middle]?.name ?? '') < target
+    ? lowerBound(cities, target, middle + 1, to)
+    : lowerBound(cities, target, from, middle);
 };
 
 interface Match {
@@ -38,16 +27,17 @@ const byRelevance =
     a.key.length - b.key.length ||
     a.city.name.localeCompare(b.city.name);
 
-export const searchCities = (index: CityIndex, query: string, region?: string): City[] => {
+// Expects cities sorted by normalized name, see scripts/build-cities.ts.
+export const searchCities = (cities: readonly City[], query: string, region?: string): City[] => {
   const normalized = normalize(query);
   if (normalized.length < MIN_QUERY) return [];
 
-  const from = lowerBound(index.keys, normalized);
-  const to = lowerBound(index.keys, `${normalized}￿`, from);
+  const from = lowerBound(cities, normalized);
+  const to = lowerBound(cities, `${normalized}￿`, from);
 
-  const ranked = index.cities
+  const ranked = cities
     .slice(from, to)
-    .map((city, offset) => ({ city, key: index.keys[from + offset] ?? '' }))
+    .map((city) => ({ city, key: normalize(city.name) }))
     .toSorted(byRelevance(normalized, region));
 
   // Praha and Prague share an id, keep the better ranked one.

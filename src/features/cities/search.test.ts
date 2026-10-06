@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createIndex, normalize, searchCities } from './search';
+import { normalize, searchCities } from './search';
 import type { City } from './types';
 
 const city = (id: number, name: string, country: string): City => ({
@@ -9,20 +9,18 @@ const city = (id: number, name: string, country: string): City => ({
   coord: { lat: 0, lon: 0 },
 });
 
-const index = createIndex(
-  [
-    city(1, 'Plzeň', 'CZ'),
-    city(2, 'Praděd', 'CZ'),
-    city(3, 'Prag', 'DE'),
-    city(4, 'Prague', 'US'),
-    city(5, 'Prague', 'CZ'),
-    city(6, 'Praha', 'CZ'),
-    city(7, 'Prato', 'IT'),
-    city(8, 'Ústí nad Labem', 'CZ'),
-  ].toSorted((a, b) => (normalize(a.name) < normalize(b.name) ? -1 : 1)),
-);
+const cities = [
+  city(1, 'Plzeň', 'CZ'),
+  city(2, 'Praděd', 'CZ'),
+  city(3, 'Prag', 'DE'),
+  city(4, 'Prague', 'US'),
+  city(5, 'Prague', 'CZ'),
+  city(6, 'Praha', 'CZ'),
+  city(7, 'Prato', 'IT'),
+  city(8, 'Ústí nad Labem', 'CZ'),
+].toSorted((a, b) => (normalize(a.name) < normalize(b.name) ? -1 : 1));
 
-const ids = (query: string, region?: string) => searchCities(index, query, region).map((c) => c.id);
+const ids = (query: string, region?: string) => searchCities(cities, query, region).map((c) => c.id);
 
 describe('normalize', () => {
   it('strips diacritics and case', () => {
@@ -57,7 +55,7 @@ describe('searchCities', () => {
   });
 
   it('shows a city only once when it also has an alias', () => {
-    const aliased = createIndex([city(1, 'Prague', 'CZ'), city(1, 'Praha', 'CZ')]);
+    const aliased = [city(1, 'Prague', 'CZ'), city(1, 'Praha', 'CZ')];
     expect(searchCities(aliased, 'praha').map((c) => c.name)).toEqual(['Praha']);
     expect(searchCities(aliased, 'pra')).toHaveLength(1);
   });
@@ -66,11 +64,11 @@ describe('searchCities', () => {
 
 describe('searchCities on the real list', async () => {
   const { readFile } = await import('node:fs/promises');
-  const cities = JSON.parse(await readFile(new URL('../../../public/cities.json', import.meta.url), 'utf8')) as City[];
-  const real = createIndex(cities);
+  const real = JSON.parse(await readFile(new URL('../../../public/cities.json', import.meta.url), 'utf8')) as City[];
 
   it('keeps the list sorted the way the binary search expects', () => {
-    expect(real.keys.every((key, i) => i === 0 || (real.keys[i - 1] ?? '') <= key)).toBe(true);
+    const keys = real.map((c) => normalize(c.name));
+    expect(keys.every((key, i) => i === 0 || (keys[i - 1] ?? '') <= key)).toBe(true);
   });
 
   it('finds Czech cities for a Czech user', () => {
