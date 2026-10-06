@@ -1,24 +1,26 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { Lang } from './i18n'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { Lang } from './i18n';
+
+export const LANG_STORAGE_KEY = 'forecast.lang';
 
 interface I18nState {
-  lang: Lang
+  lang: Lang;
 }
 
-const initialState: I18nState = { lang: 'en' }
+const initialState: I18nState = { lang: 'en' };
 
 export const i18nSlice = createSlice({
   name: 'i18n',
   initialState,
   reducers: {
     langChanged: (state, action: PayloadAction<Lang>) => {
-      state.lang = action.payload
+      state.lang = action.payload;
     },
   },
   selectors: {
     selectLang: (state) => state.lang,
   },
-})
+});
 
-export const { langChanged } = i18nSlice.actions
-export const { selectLang } = i18nSlice.selectors
+export const { langChanged } = i18nSlice.actions;
+export const { selectLang } = i18nSlice.selectors;

@@ -1,50 +1,54 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { locationSelected } from '../forecast/forecastSlice'
-import type { City } from './types'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { locationSelected } from '../forecast/forecastSlice';
+import type { City } from './types';
 
 interface CitiesState {
-  status: 'loading' | 'ready' | 'failed'
-  query: string
-  suggestions: City[]
-  /** The query the current suggestions belong to, they lag behind typing by the debounce. */
-  suggestionsQuery: string
+  status: 'idle' | 'loading' | 'ready' | 'failed';
+  query: string;
+  suggestions: City[];
+  // Lags behind `query` by the search debounce.
+  suggestionsQuery: string;
 }
 
 const initialState: CitiesState = {
-  status: 'loading',
+  status: 'idle',
   query: '',
   suggestions: [],
   suggestionsQuery: '',
-}
+};
 
 export const citiesSlice = createSlice({
   name: 'cities',
   initialState,
   reducers: {
+    citiesRequested: (state) => {
+      state.status = 'loading';
+    },
+    searchFocused: () => undefined,
     citiesLoaded: (state) => {
-      state.status = 'ready'
+      state.status = 'ready';
     },
     citiesFailed: (state) => {
-      state.status = 'failed'
+      state.status = 'failed';
     },
     citiesRetryRequested: (state) => {
-      state.status = 'loading'
+      state.status = 'loading';
     },
     queryChanged: (state, action: PayloadAction<string>) => {
-      state.query = action.payload
+      state.query = action.payload;
     },
     suggestionsUpdated: (state, action: PayloadAction<{ query: string; cities: City[] }>) => {
-      state.suggestions = action.payload.cities
-      state.suggestionsQuery = action.payload.query
+      state.suggestions = action.payload.cities;
+      state.suggestionsQuery = action.payload.query;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(locationSelected, (state, action) => {
-      const location = action.payload
-      state.query = location.kind === 'city' ? `${location.city.name}, ${location.city.country}` : ''
-      state.suggestions = []
-      state.suggestionsQuery = ''
-    })
+      const location = action.payload;
+      state.query = location.kind === 'city' ? `${location.city.name}, ${location.city.country}` : '';
+      state.suggestions = [];
+      state.suggestionsQuery = '';
+    });
   },
   selectors: {
     selectCitiesStatus: (state) => state.status,
@@ -52,8 +56,15 @@ export const citiesSlice = createSlice({
     selectSuggestions: (state) => state.suggestions,
     selectSuggestionsQuery: (state) => state.suggestionsQuery,
   },
-})
+});
 
-export const { citiesLoaded, citiesFailed, citiesRetryRequested, queryChanged, suggestionsUpdated } =
-  citiesSlice.actions
-export const { selectCitiesStatus, selectQuery, selectSuggestions, selectSuggestionsQuery } = citiesSlice.selectors
+export const {
+  citiesRequested,
+  searchFocused,
+  citiesLoaded,
+  citiesFailed,
+  citiesRetryRequested,
+  queryChanged,
+  suggestionsUpdated,
+} = citiesSlice.actions;
+export const { selectCitiesStatus, selectQuery, selectSuggestions, selectSuggestionsQuery } = citiesSlice.selectors;

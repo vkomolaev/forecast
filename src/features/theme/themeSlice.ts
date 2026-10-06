@@ -1,28 +1,31 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
-export const THEMES = ['system', 'light', 'dark'] as const
-export type Theme = (typeof THEMES)[number]
+// Also read by the first-paint script in index.html.
+export const THEME_STORAGE_KEY = 'forecast.theme';
 
-export const isTheme = (value: unknown): value is Theme => THEMES.includes(value as Theme)
+export const THEMES = ['system', 'light', 'dark'] as const;
+export type Theme = (typeof THEMES)[number];
+
+export const isTheme = (value: unknown): value is Theme => THEMES.includes(value as Theme);
 
 interface ThemeState {
-  theme: Theme
+  theme: Theme;
 }
 
-const initialState: ThemeState = { theme: 'system' }
+const initialState: ThemeState = { theme: 'system' };
 
 export const themeSlice = createSlice({
   name: 'theme',
   initialState,
   reducers: {
     themeChanged: (state, action: PayloadAction<Theme>) => {
-      state.theme = action.payload
+      state.theme = action.payload;
     },
   },
   selectors: {
     selectTheme: (state) => state.theme,
   },
-})
+});
 
-export const { themeChanged } = themeSlice.actions
-export const { selectTheme } = themeSlice.selectors
+export const { themeChanged } = themeSlice.actions;
+export const { selectTheme } = themeSlice.selectors;
