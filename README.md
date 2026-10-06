@@ -22,7 +22,6 @@ Set `VITE_OWM_API_KEY` in `.env.local`, then run `npm run dev`.
 ```sh
 npm test              # Unit tests
 npm run lint         # ESLint
-npm run typecheck    # TypeScript
 npm run build        # Production build in dist/
 npm run preview      # Preview the build
 npm run cities       # Rebuild public/cities.json

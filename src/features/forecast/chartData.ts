@@ -2,13 +2,13 @@ import type { Forecast } from './types';
 
 const SECONDS_PER_DAY = 86_400;
 
-export interface ChartPoint {
+interface ChartPoint {
   time: number;
   temp: number;
   feelsLike: number;
 }
 
-export interface ChartData {
+interface ChartData {
   points: ChartPoint[];
   ticks: number[];
   midnights: number[];

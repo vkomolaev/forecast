@@ -1,5 +1,4 @@
 $md: 720px;
-$lg: 1024px;
 
 @mixin from($width) {
   @media (min-width: $width) {

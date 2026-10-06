@@ -8,9 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "typecheck": "tsc -b",
     "test": "vitest run",
-    "test:watch": "vitest",
     "cities": "node scripts/build-cities.ts"
   },
   "dependencies": {
