@@ -1,0 +1,137 @@
+@use '../../styles/mixins' as mx;
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 64px;
+  padding: var(--space-2) var(--space-4);
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+
+  &::after {
+    content: '';
+    width: 8px;
+    height: 8px;
+    margin-left: var(--space-2);
+    border-right: 2px solid var(--color-muted);
+    border-bottom: 2px solid var(--color-muted);
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+  }
+
+  .card[open] > &::after {
+    transform: rotate(-135deg);
+  }
+}
+
+.date {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+
+.today {
+  padding: 0 var(--space-2);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  border: 1px solid currentColor;
+  border-radius: 999px;
+}
+
+.icon {
+  display: block;
+}
+
+.range {
+  display: flex;
+  gap: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.max {
+  font-weight: 600;
+}
+
+.min {
+  color: var(--color-muted);
+}
+
+.tableWrap {
+  overflow-x: auto;
+  border-top: 1px solid var(--color-border);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+
+  th,
+  td {
+    padding: var(--space-1) var(--space-3);
+    text-align: start;
+    white-space: nowrap;
+  }
+
+  thead th {
+    font-weight: 500;
+    color: var(--color-muted);
+  }
+
+  tbody th {
+    font-weight: 500;
+  }
+
+  tbody tr + tr {
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.weather {
+  display: flex;
+  align-items: center;
+}
+
+.description {
+  @include mx.visually-hidden;
+
+  @include mx.from(mx.$md) {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip-path: none;
+    white-space: normal;
+  }
+}
+
+.temp {
+  font-weight: 600;
+}
+
+.optional {
+  display: none;
+
+  @include mx.from(mx.$md) {
+    display: table-cell;
+  }
+}

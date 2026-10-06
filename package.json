@@ -10,11 +10,15 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "cities": "node scripts/build-cities.ts"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.13.0",
     "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "react-dom": "^19.3.0",
+    "react-redux": "^9.3.0",
+    "redux-saga": "^1.5.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.6",
