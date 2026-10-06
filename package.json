@@ -17,7 +17,9 @@
     "@reduxjs/toolkit": "^2.13.0",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
+    "react-is": "^19.3.0",
     "react-redux": "^9.3.0",
+    "recharts": "^3.10.1",
     "redux-saga": "^1.5.1"
   },
   "devDependencies": {

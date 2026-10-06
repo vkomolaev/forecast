@@ -1,12 +1,21 @@
 :root {
   color-scheme: light dark;
 
+  &[data-theme='light'] {
+    color-scheme: light;
+  }
+
+  &[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
   --color-bg: light-dark(#f4f6f9, #11151b);
   --color-surface: light-dark(#ffffff, #1b212a);
   --color-text: light-dark(#1b2330, #e6ebf2);
   --color-muted: light-dark(#5b6676, #9aa6b6);
   --color-border: light-dark(#dde3ea, #2c3440);
   --color-accent: light-dark(#1f6feb, #58a6ff);
+  --color-on-accent: light-dark(#ffffff, #0d1117);
   --color-warm: light-dark(#d9480f, #ff8a50);
   --color-error: light-dark(#c92a2a, #ff6b6b);
 

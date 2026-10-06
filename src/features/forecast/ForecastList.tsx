@@ -1,8 +1,10 @@
-import { useId } from 'react'
+import { lazy, Suspense, useDeferredValue, useId } from 'react'
 import { useT } from '../../i18n/useT'
 import { DayCard } from './DayCard'
 import styles from './ForecastList.module.scss'
 import type { Forecast } from './types'
+
+const TemperatureChart = lazy(() => import('./TemperatureChart'))
 
 interface Props {
   forecast: Forecast
@@ -13,6 +15,7 @@ interface Props {
 export const ForecastList = ({ forecast, place, busy }: Props) => {
   const t = useT()
   const headingId = useId()
+  const chartForecast = useDeferredValue(forecast)
 
   return (
     <section className={styles.section} aria-labelledby={headingId} aria-busy={busy}>
@@ -20,6 +23,9 @@ export const ForecastList = ({ forecast, place, busy }: Props) => {
       <h2 id={headingId} className={styles.heading}>
         {t('forecastFor', { place })}
       </h2>
+      <Suspense fallback={<div className={styles.chartPlaceholder} />}>
+        <TemperatureChart forecast={chartForecast} />
+      </Suspense>
       <ol className={styles.days}>
         {forecast.days.map((day, index) => (
           <li key={day.date}>

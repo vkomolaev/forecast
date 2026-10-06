@@ -16,3 +16,15 @@ $lg: 1024px;
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+@mixin visually-hidden-below($width) {
+  @include visually-hidden;
+
+  @include from($width) {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    clip-path: none;
+  }
+}

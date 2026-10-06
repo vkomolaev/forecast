@@ -1,6 +1,9 @@
 import styles from './App.module.scss'
 import { CitySearch } from './features/cities/CitySearch'
 import { ForecastPanel } from './features/forecast/ForecastPanel'
+import { LocateButton } from './features/geolocation/LocateButton'
+import { ThemeSwitch } from './features/theme/ThemeSwitch'
+import { LangSwitch } from './i18n/LangSwitch'
 import { useT } from './i18n/useT'
 
 function App() {
@@ -9,8 +12,17 @@ function App() {
   return (
     <div className={styles.app}>
       <header className={styles.header}>
-        <h1 className={styles.title}>{t('appTitle')}</h1>
-        <CitySearch />
+        <div className={styles.top}>
+          <h1 className={styles.title}>{t('appTitle')}</h1>
+          <div className={styles.settings}>
+            <ThemeSwitch />
+            <LangSwitch />
+          </div>
+        </div>
+        <div className={styles.controls}>
+          <CitySearch />
+          <LocateButton />
+        </div>
       </header>
       <main>
         <ForecastPanel />

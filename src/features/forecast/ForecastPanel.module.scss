@@ -1,3 +1,5 @@
+@use '../../styles/mixins' as mx;
+
 .message {
   margin: 0;
   padding: var(--space-6) var(--space-4);
@@ -15,9 +17,49 @@
 .retry {
   padding: var(--space-2) var(--space-4);
   font: inherit;
-  color: #fff;
+  color: var(--color-on-accent);
   background: var(--color-accent);
   border: 0;
   border-radius: 8px;
   cursor: pointer;
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.loadingText {
+  @include mx.visually-hidden;
+}
+
+%block {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  animation: pulse 1.2s ease-in-out infinite alternate;
+}
+
+.skeletonHeading {
+  @extend %block;
+  width: 60%;
+  height: 28px;
+  margin-bottom: var(--space-1);
+}
+
+.skeletonChart {
+  @extend %block;
+  height: 266px;
+  margin-bottom: var(--space-1);
+}
+
+.skeletonDay {
+  @extend %block;
+  height: 66px;
+}
+
+@keyframes pulse {
+  to {
+    opacity: 0.5;
+  }
 }

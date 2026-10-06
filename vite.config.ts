@@ -4,6 +4,8 @@ import react, { reactCompilerPreset } from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
+  // Relative paths, so the build works under any GitHub Pages subpath.
+  base: './',
   plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
   test: {
     environment: 'node',

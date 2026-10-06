@@ -1,5 +1,6 @@
 import { createSelector, createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import type { ForecastError } from '../../api/openWeather'
+import { langChanged } from '../../i18n/i18nSlice'
 import type { Forecast, Location } from './types'
 
 interface ForecastState {
@@ -37,6 +38,14 @@ export const forecastSlice = createSlice({
       state.status = 'failed'
       state.error = action.payload
     },
+  },
+  extraReducers: (builder) => {
+    // Weather descriptions come from the API in the chosen language, so they are fetched again.
+    builder.addCase(langChanged, (state) => {
+      if (!state.location) return
+      state.status = 'loading'
+      state.error = null
+    })
   },
   selectors: {
     selectLocation: (state) => state.location,

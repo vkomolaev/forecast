@@ -31,13 +31,22 @@ export const ForecastPanel = () => {
     )
   }
 
-  if (!forecast) {
+  if (!forecast && status === 'loading') {
     return (
-      <p className={styles.message} aria-live="polite">
-        {status === 'loading' ? t('loading') : t('emptyState')}
-      </p>
+      <div className={styles.skeleton} aria-busy="true">
+        <p className={styles.loadingText} role="status">
+          {t('loading')}
+        </p>
+        <div className={styles.skeletonHeading} />
+        <div className={styles.skeletonChart} />
+        {Array.from({ length: 5 }, (_, index) => (
+          <div key={index} className={styles.skeletonDay} />
+        ))}
+      </div>
     )
   }
+
+  if (!forecast) return <p className={styles.message}>{t('emptyState')}</p>
 
   return <ForecastList forecast={forecast} place={place} busy={status === 'loading'} />
 }

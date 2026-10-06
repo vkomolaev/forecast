@@ -10,7 +10,7 @@ export const en = {
   emptyState: 'Pick a city to see its 5-day forecast.',
   loading: 'Loading forecast…',
   retry: 'Try again',
-  'error.missing-key': 'The OpenWeatherMap API key is not configured.',
+  'error.missing-key': 'The OpenWeatherMap API key is not configured. Set VITE_OWM_API_KEY in .env.local.',
   'error.invalid-key': 'The OpenWeatherMap API key is invalid.',
   'error.not-found': 'There is no forecast for this place.',
   'error.rate-limit': 'Too many requests. Please try again in a minute.',
@@ -23,6 +23,18 @@ export const en = {
   'column.humidity': 'Humidity',
   'column.pop': 'Precip.',
   dayRange: 'High {max}, low {min}',
+  'lang.label': 'Language',
+  'locate.button': 'Use my location',
+  'locate.busy': 'Locating…',
+  'locate.denied': 'Location access is blocked. You can allow it in the browser settings.',
+  'locate.unavailable': 'Could not determine your location.',
+  'chart.title': 'Temperature',
+  'chart.summary': 'Temperature over the next days, from {min} to {max}',
+  'chart.temp': 'Temperature',
+  'theme.label': 'Theme',
+  'theme.system': 'Auto',
+  'theme.light': 'Light',
+  'theme.dark': 'Dark',
 }
 
 export type MessageKey = keyof typeof en

@@ -45,10 +45,14 @@ export const searchCities = (index: CityIndex, query: string, region?: string): 
   const from = lowerBound(index.keys, normalized)
   const to = lowerBound(index.keys, `${normalized}￿`, from)
 
-  return index.cities
+  const ranked = index.cities
     .slice(from, to)
     .map((city, offset) => ({ city, key: index.keys[from + offset] ?? '' }))
     .toSorted(byRelevance(normalized, region))
+
+  // An alias shares the id of its original city, so keep the better ranked one.
+  return [...Map.groupBy(ranked, (match) => match.city.id).values()]
     .slice(0, LIMIT)
-    .map((match) => match.city)
+    .map(([best]) => best?.city)
+    .filter((city) => city !== undefined)
 }

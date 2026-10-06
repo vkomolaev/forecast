@@ -1,6 +1,7 @@
 import { useId, useState, type KeyboardEvent } from 'react'
 import { useAppDispatch, useAppSelector } from '../../app/hooks'
 import { useT } from '../../i18n/useT'
+import { selectLang } from '../../i18n/i18nSlice'
 import { formatCoordinate, formatCountry } from '../../lib/format'
 import { locationSelected } from '../forecast/forecastSlice'
 import {
@@ -27,6 +28,7 @@ const Highlighted = ({ name, query }: { name: string; query: string }) => {
 
 export const CitySearch = () => {
   const t = useT()
+  const lang = useAppSelector(selectLang)
   const dispatch = useAppDispatch()
   const id = useId()
   const status = useAppSelector(selectCitiesStatus)
@@ -138,7 +140,7 @@ export const CitySearch = () => {
               <Highlighted name={city.name} query={suggestionsQuery} />
             </span>
             <span className={styles.meta}>
-              {formatCountry(city.country)} · {formatCoordinate(city.coord.lat)}°, {formatCoordinate(city.coord.lon)}°
+              {formatCountry(city.country, [lang])} · {formatCoordinate(city.coord.lat)}°, {formatCoordinate(city.coord.lon)}°
             </span>
           </li>
         ))}

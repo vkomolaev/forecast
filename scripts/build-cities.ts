@@ -15,6 +15,18 @@ interface OwmCity extends City {
 const download = async (source: string | undefined) =>
   source ? readFile(source) : Buffer.from(await (await fetch(SOURCE_URL)).arrayBuffer())
 
+// OWM uses English names for these, so Czech users would not find them.
+const ALIASES: Readonly<Record<number, string>> = {
+  3067696: 'Praha',
+  3068160: 'Plzeň',
+}
+
+const withAliases = (cities: City[]) =>
+  cities.flatMap((city) => {
+    const alias = ALIASES[city.id]
+    return alias ? [city, { ...city, name: alias }] : [city]
+  })
+
 const round = (value: number) => Math.round(value * 100) / 100
 
 const isUsable = (city: OwmCity) => city.country !== '' && city.name.trim() !== ''
@@ -36,7 +48,9 @@ const byKey = (a: City, b: City) => {
 }
 
 const build = (raw: Buffer): City[] =>
-  dedupe((JSON.parse(gunzipSync(raw).toString('utf8')) as OwmCity[]).filter(isUsable).map(toCity)).toSorted(byKey)
+  withAliases(
+    dedupe((JSON.parse(gunzipSync(raw).toString('utf8')) as OwmCity[]).filter(isUsable).map(toCity)),
+  ).toSorted(byKey)
 
 const cities = build(await download(process.argv[2]))
 await writeFile(TARGET, JSON.stringify(cities))

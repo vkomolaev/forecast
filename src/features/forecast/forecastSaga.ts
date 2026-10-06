@@ -1,7 +1,7 @@
 import { call, cancelled, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import type { SagaIterator } from 'redux-saga'
 import { fetchForecast, type ForecastResult } from '../../api/openWeather'
-import { selectLang } from '../../i18n/i18nSlice'
+import { langChanged, selectLang } from '../../i18n/i18nSlice'
 import { readJson, writeJson } from '../../lib/storage'
 import type { Lang } from '../../i18n/i18n'
 import {
@@ -68,7 +68,7 @@ function* rememberLocation(action: ReturnType<typeof locationSelected>): SagaIte
 }
 
 export function* forecastSaga(): SagaIterator {
-  yield takeLatest([locationSelected.type, retryRequested.type], loadForecast)
+  yield takeLatest([locationSelected.type, retryRequested.type, langChanged.type], loadForecast)
   yield takeEvery(locationSelected.type, rememberLocation)
 
   const saved = parseLocation(yield call(readJson, STORAGE_KEY))

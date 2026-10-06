@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatDay, formatPercent, formatSpeed, formatTemperature, formatTime } from './format'
+import { formatCountry, formatDay, formatPercent, formatSpeed, formatTemperature, formatTime } from './format'
 
 // Tue 6 Oct 2026, 14:00 in the city's local time.
 const time = Date.UTC(2026, 9, 6, 14) / 1000
@@ -29,5 +29,10 @@ describe('format', () => {
 
   it('does not show negative zero', () => {
     expect(spaces(formatTemperature(-0.4, cs))).toBe('0 °C')
+  })
+
+  it('names countries in the given language', () => {
+    expect(formatCountry('CZ', ['cs'])).toBe('Česko')
+    expect(formatCountry('HR', ['en'])).toBe('Croatia')
   })
 })

@@ -56,6 +56,12 @@ describe('searchCities', () => {
     expect(ids('pra', 'CZ').slice(0, 3)).toEqual([6, 2, 5])
   })
 
+  it('shows a city only once when it also has an alias', () => {
+    const aliased = createIndex([city(1, 'Prague', 'CZ'), city(1, 'Praha', 'CZ')])
+    expect(searchCities(aliased, 'praha').map((c) => c.name)).toEqual(['Praha'])
+    expect(searchCities(aliased, 'pra')).toHaveLength(1)
+  })
+
   it('returns at most ten results', () => {
     const many = createIndex(Array.from({ length: 30 }, (_, i) => city(i, `Town ${String(i).padStart(2, '0')}`, 'CZ')))
     expect(searchCities(many, 'town')).toHaveLength(10)
@@ -72,8 +78,10 @@ describe('searchCities on the real list', async () => {
   })
 
   it('finds Czech cities for a Czech user', () => {
-    expect(searchCities(real, 'pra', 'CZ').map((c) => c.name)).toContain('Prague')
+    expect(searchCities(real, 'pra', 'CZ').map((c) => c.name)).toContain('Praha')
     expect(searchCities(real, 'pilsen', 'CZ')[0]?.name).toBe('Pilsen')
+    expect(searchCities(real, 'praha', 'CZ')[0]?.name).toBe('Praha')
+    expect(searchCities(real, 'plzen', 'CZ')[0]?.name).toBe('Plzeň')
     expect(searchCities(real, 'ceske bud', 'CZ')[0]?.name).toBe('České Budějovice')
   })
 })

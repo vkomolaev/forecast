@@ -1,3 +1,4 @@
+import type { Lang } from '../i18n/i18n'
 import type { OwmForecastResponse } from './types'
 
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/forecast'
@@ -11,8 +12,11 @@ export type ForecastResult =
 interface ForecastQuery {
   lat: number
   lon: number
-  lang: string
+  lang: Lang
 }
+
+// OpenWeatherMap uses the country code for Czech.
+const OWM_LANG: Record<Lang, string> = { en: 'en', cs: 'cz' }
 
 const errorByStatus = (status: number): ForecastError => {
   switch (status) {
@@ -38,7 +42,7 @@ export const fetchForecast = async (
     lat: String(lat),
     lon: String(lon),
     units: 'metric',
-    lang,
+    lang: OWM_LANG[lang],
     appid: apiKey,
   })
 
