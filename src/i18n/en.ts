@@ -15,6 +15,7 @@ export const en = {
   'error.not-found': 'There is no forecast for this place.',
   'error.rate-limit': 'Too many requests. Please try again in a minute.',
   'error.network': 'Could not load the forecast.',
+  'error.invalid-response': 'The weather service sent data the app cannot read. Try again later.',
   'column.time': 'Time',
   'column.weather': 'Weather',
   'column.temp': 'Temp',
@@ -31,11 +32,12 @@ export const en = {
   'chart.title': 'Temperature',
   'chart.summary': 'Temperature over the next days, from {min} to {max}',
   'chart.temp': 'Temperature',
+  'chart.unavailable': 'Could not load the chart. The forecast is available in the table below.',
   'theme.label': 'Theme',
   'theme.system': 'Auto',
   'theme.light': 'Light',
   'theme.dark': 'Dark',
-}
+};
 
-export type MessageKey = keyof typeof en
-export type Messages = Readonly<Record<MessageKey, string>>
+export type MessageKey = keyof typeof en;
+export type Messages = Readonly<Record<MessageKey, string>>;

@@ -1,8 +1,11 @@
-import type { ReactNode } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { useT } from '../../i18n/useT'
-import styles from '../../styles/Segmented.module.scss'
-import { selectTheme, themeChanged, THEMES, type Theme } from './themeSlice'
+import { useEffect, type ReactNode } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useT } from '../../i18n/useT';
+import styles from '../../styles/Segmented.module.scss';
+import { writeJson } from '../../lib/storage';
+import { selectTheme, themeChanged, THEMES, THEME_STORAGE_KEY, type Theme } from './themeSlice';
+
+const BROWSER_BAR = { light: '#f4f6f9', dark: '#11151b' };
 
 const ICONS: Record<Theme, ReactNode> = {
   system: (
@@ -18,12 +21,24 @@ const ICONS: Record<Theme, ReactNode> = {
     </>
   ),
   dark: <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />,
-}
+};
 
 export const ThemeSwitch = () => {
-  const t = useT()
-  const dispatch = useAppDispatch()
-  const current = useAppSelector(selectTheme)
+  const t = useT();
+  const dispatch = useAppDispatch();
+  const current = useAppSelector(selectTheme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (current === 'system') delete root.dataset.theme;
+    else root.dataset.theme = current;
+
+    // A manual choice overrides both system-specific theme-color tags.
+    document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
+      const scheme = meta.media.includes('dark') ? 'dark' : 'light';
+      meta.content = BROWSER_BAR[current === 'system' ? scheme : current];
+    });
+  }, [current]);
 
   return (
     <div className={styles.switch} role="group" aria-label={t('theme.label')}>
@@ -35,7 +50,10 @@ export const ThemeSwitch = () => {
           aria-pressed={theme === current}
           aria-label={t(`theme.${theme}`)}
           title={t(`theme.${theme}`)}
-          onClick={() => dispatch(themeChanged(theme))}
+          onClick={() => {
+            dispatch(themeChanged(theme));
+            writeJson(THEME_STORAGE_KEY, theme);
+          }}
         >
           <svg className={styles.icon} viewBox="0 0 24 24" aria-hidden="true">
             {ICONS[theme]}
@@ -43,5 +61,5 @@ export const ThemeSwitch = () => {
         </button>
       ))}
     </div>
-  )
-}
+  );
+};

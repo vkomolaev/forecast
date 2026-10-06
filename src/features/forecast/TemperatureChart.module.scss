@@ -1,16 +1,13 @@
 @use '../../styles/mixins' as mx;
 
 .figure {
-  margin: 0 0 var(--space-4);
-  padding: var(--space-3) var(--space-2) var(--space-2);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  margin: 0 0 var(--space-6);
 }
 
 .caption {
-  padding-inline: var(--space-2);
-  font-weight: 600;
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--color-muted);
 }
 
 .summary {
@@ -42,12 +39,12 @@
     .recharts-default-tooltip {
       background: var(--color-surface) !important;
       border-color: var(--color-border) !important;
-      border-radius: 8px;
+      border-radius: var(--radius-inner);
     }
 
     .temp path,
     .legend-item-1 path {
-      stroke: var(--color-accent);
+      stroke: var(--temp-hot);
     }
 
     .feels-like path,

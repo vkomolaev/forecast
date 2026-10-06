@@ -1,13 +1,13 @@
-import styles from './App.module.scss'
-import { CitySearch } from './features/cities/CitySearch'
-import { ForecastPanel } from './features/forecast/ForecastPanel'
-import { LocateButton } from './features/geolocation/LocateButton'
-import { ThemeSwitch } from './features/theme/ThemeSwitch'
-import { LangSwitch } from './i18n/LangSwitch'
-import { useT } from './i18n/useT'
+import styles from './App.module.scss';
+import { CitySearch } from './features/cities/CitySearch';
+import { ForecastPanel } from './features/forecast/ForecastPanel';
+import { LocateButton } from './features/geolocation/LocateButton';
+import { ThemeSwitch } from './features/theme/ThemeSwitch';
+import { LangSwitch } from './i18n/LangSwitch';
+import { useT } from './i18n/useT';
 
 function App() {
-  const t = useT()
+  const t = useT();
 
   return (
     <div className={styles.app}>
@@ -28,7 +28,7 @@ function App() {
         <ForecastPanel />
       </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

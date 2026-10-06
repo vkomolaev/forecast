@@ -1,11 +1,11 @@
-import { formatDay, formatPercent, formatSpeed, formatTemperature, formatTime } from '../../lib/format'
-import { useT } from '../../i18n/useT'
-import styles from './DayCard.module.scss'
-import type { Day } from './types'
+import { formatDay, formatPercent, formatSpeed, formatTemperature, formatTime } from '../../lib/format';
+import { useT } from '../../i18n/useT';
+import styles from './DayCard.module.scss';
+import type { Day } from './types';
 
 interface Props {
-  day: Day
-  defaultOpen: boolean
+  day: Day;
+  defaultOpen: boolean;
 }
 
 const WeatherIcon = ({ icon, description, size }: { icon: string; description: string; size: number }) => (
@@ -17,15 +17,15 @@ const WeatherIcon = ({ icon, description, size }: { icon: string; description: s
     height={size}
     loading="lazy"
   />
-)
+);
 
 export const DayCard = ({ day, defaultOpen }: Props) => {
-  const t = useT()
-  const max = formatTemperature(day.max)
-  const min = formatTemperature(day.min)
+  const t = useT();
+  const max = formatTemperature(day.max);
+  const min = formatTemperature(day.min);
 
   return (
-    <details className={styles.card} open={defaultOpen}>
+    <details className={styles.card} data-today={day.isToday || undefined} open={defaultOpen}>
       <summary className={styles.summary}>
         <span className={styles.date}>
           {day.isToday && <span className={styles.today}>{t('today')}</span>}
@@ -33,8 +33,9 @@ export const DayCard = ({ day, defaultOpen }: Props) => {
         </span>
         <WeatherIcon icon={day.icon} description={day.description} size={48} />
         <span className={styles.range} aria-label={t('dayRange', { max, min })}>
-          <span className={styles.max}>{max}</span>
           <span className={styles.min}>{min}</span>
+          <span className={styles.bar} style={{ '--min': day.min, '--max': day.max }} aria-hidden="true" />
+          <span className={styles.max}>{max}</span>
         </span>
       </summary>
 
@@ -76,5 +77,5 @@ export const DayCard = ({ day, defaultOpen }: Props) => {
         </table>
       </div>
     </details>
-  )
-}
+  );
+};

@@ -1,14 +1,40 @@
 .section {
-  transition: opacity 0.2s;
+  position: relative;
 
-  &[aria-busy='true'] {
+  > * {
+    transition: opacity 0.2s;
+  }
+
+  &[aria-busy='true'] > * {
     opacity: 0.6;
+  }
+
+  &[aria-busy='true']::before {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--space-2)) 0 auto;
+    height: 3px;
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, var(--color-accent), transparent) no-repeat;
+    background-size: 40% 100%;
+    animation: progress 1s linear infinite;
+  }
+}
+
+@keyframes progress {
+  from {
+    background-position: -100% 0;
+  }
+
+  to {
+    background-position: 200% 0;
   }
 }
 
 .heading {
   margin: 0 0 var(--space-4);
-  font-size: 1.25rem;
+  font-size: clamp(1.75rem, 5vw, 2.5rem);
+  text-wrap: balance;
 }
 
 .days {
@@ -23,9 +49,6 @@
 .chartPlaceholder {
   height: 266px;
   margin-bottom: var(--space-4);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
 
   @media (min-width: 720px) {
     height: 326px;

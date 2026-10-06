@@ -1,13 +1,15 @@
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { useT } from '../../i18n/useT'
-import { locateRequested, selectLocateStatus } from './geolocationSlice'
-import styles from './LocateButton.module.scss'
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { selectLocation } from '../forecast/forecastSlice';
+import { useT } from '../../i18n/useT';
+import { locateRequested, selectLocateStatus } from './geolocationSlice';
+import styles from './LocateButton.module.scss';
 
 export const LocateButton = () => {
-  const t = useT()
-  const dispatch = useAppDispatch()
-  const status = useAppSelector(selectLocateStatus)
-  const busy = status === 'locating'
+  const t = useT();
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(selectLocateStatus);
+  const busy = status === 'locating';
+  const active = useAppSelector(selectLocation)?.kind === 'coords';
 
   return (
     <>
@@ -15,6 +17,7 @@ export const LocateButton = () => {
         type="button"
         className={styles.button}
         aria-busy={busy}
+        aria-pressed={active}
         disabled={busy}
         onClick={() => dispatch(locateRequested())}
       >
@@ -29,5 +32,5 @@ export const LocateButton = () => {
         {(status === 'denied' || status === 'unavailable') && t(`locate.${status}`)}
       </p>
     </>
-  )
-}
+  );
+};

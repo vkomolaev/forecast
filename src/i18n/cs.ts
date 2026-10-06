@@ -1,4 +1,4 @@
-import type { Messages } from './en'
+import type { Messages } from './en';
 
 export const cs: Messages = {
   appTitle: 'Předpověď',
@@ -17,6 +17,7 @@ export const cs: Messages = {
   'error.not-found': 'Pro toto místo předpověď není.',
   'error.rate-limit': 'Příliš mnoho požadavků. Zkuste to prosím za minutu.',
   'error.network': 'Předpověď se nepodařilo načíst.',
+  'error.invalid-response': 'Služba počasí poslala data, která aplikace neumí přečíst. Zkuste to později.',
   'column.time': 'Čas',
   'column.weather': 'Počasí',
   'column.temp': 'Tepl.',
@@ -33,8 +34,9 @@ export const cs: Messages = {
   'chart.title': 'Teplota',
   'chart.summary': 'Teplota v příštích dnech, od {min} do {max}',
   'chart.temp': 'Teplota',
+  'chart.unavailable': 'Graf se nepodařilo načíst. Předpověď najdete v tabulce níže.',
   'theme.label': 'Motiv',
   'theme.system': 'Automaticky',
   'theme.light': 'Světlý',
   'theme.dark': 'Tmavý',
-}
+};

@@ -1,21 +1,21 @@
-import { CartesianGrid, Legend, Line, LineChart, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts'
-import { useT } from '../../i18n/useT'
-import { formatShortDay, formatTemperature, formatTime } from '../../lib/format'
-import { toChartData } from './chartData'
-import styles from './TemperatureChart.module.scss'
-import type { Forecast } from './types'
+import { CartesianGrid, Legend, Line, LineChart, ReferenceLine, Tooltip, XAxis, YAxis } from 'recharts';
+import { useT } from '../../i18n/useT';
+import { formatShortDay, formatTemperature, formatTime } from '../../lib/format';
+import { toChartData } from './chartData';
+import styles from './TemperatureChart.module.scss';
+import type { Forecast } from './types';
 
 interface Props {
-  forecast: Forecast
+  forecast: Forecast;
 }
 
-const formatDegrees = (value: number) => `${String(Math.round(value))}°`
-const formatMoment = (time: unknown) => `${formatShortDay(Number(time))} ${formatTime(Number(time))}`
-const formatValue = (value: unknown) => formatTemperature(Number(value))
+const formatDegrees = (value: number) => `${String(Math.round(value))}°`;
+const formatMoment = (time: unknown) => `${formatShortDay(Number(time))} ${formatTime(Number(time))}`;
+const formatValue = (value: unknown) => formatTemperature(Number(value));
 
 export default function TemperatureChart({ forecast }: Props) {
-  const t = useT()
-  const { points, ticks, midnights, min, max, degrees } = toChartData(forecast)
+  const t = useT();
+  const { points, ticks, midnights, min, max, degrees } = toChartData(forecast);
 
   return (
     <figure className={styles.figure}>
@@ -52,7 +52,7 @@ export default function TemperatureChart({ forecast }: Props) {
             name={t('column.feelsLike')}
             type="monotone"
             dot={false}
-            stroke="#9aa6b6"
+            stroke="#56636b"
             strokeDasharray="4 4"
           />
           <Line
@@ -61,11 +61,11 @@ export default function TemperatureChart({ forecast }: Props) {
             name={t('chart.temp')}
             type="monotone"
             dot={false}
-            stroke="#1f6feb"
-            strokeWidth={2}
+            stroke="#dd5f3b"
+            strokeWidth={2.5}
           />
         </LineChart>
       </div>
     </figure>
-  )
+  );
 }

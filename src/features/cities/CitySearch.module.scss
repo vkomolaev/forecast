@@ -17,7 +17,7 @@
   color: var(--color-text);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
+  border-radius: 999px;
 
   &::placeholder {
     color: var(--color-muted);
@@ -41,8 +41,8 @@
   list-style: none;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  box-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  border-radius: var(--radius-inner);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--color-text) 16%, transparent);
 
   &[hidden] {
     display: none;
@@ -63,7 +63,7 @@
 }
 
 .name {
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .mark {
@@ -84,13 +84,27 @@
 
 .status {
   min-height: 1.5em;
-  padding-top: var(--space-1);
+  margin-top: var(--space-1);
   font-size: 0.875rem;
   color: var(--color-muted);
+}
 
-  &:empty {
-    min-height: 0;
-    padding: 0;
+.loading::before {
+  content: '';
+  display: inline-block;
+  width: 0.9em;
+  height: 0.9em;
+  margin-right: var(--space-2);
+  vertical-align: -0.1em;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
   }
 }
 

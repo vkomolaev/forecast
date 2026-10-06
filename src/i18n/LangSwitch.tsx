@@ -1,13 +1,19 @@
-import { useAppDispatch, useAppSelector } from '../app/hooks'
-import { LANGS } from './i18n'
-import { langChanged, selectLang } from './i18nSlice'
-import styles from '../styles/Segmented.module.scss'
-import { useT } from './useT'
+import { useEffect } from 'react';
+import { writeJson } from '../lib/storage';
+import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { LANGS } from './i18n';
+import { langChanged, selectLang, LANG_STORAGE_KEY } from './i18nSlice';
+import styles from '../styles/Segmented.module.scss';
+import { useT } from './useT';
 
 export const LangSwitch = () => {
-  const t = useT()
-  const dispatch = useAppDispatch()
-  const current = useAppSelector(selectLang)
+  const t = useT();
+  const dispatch = useAppDispatch();
+  const current = useAppSelector(selectLang);
+
+  useEffect(() => {
+    document.documentElement.lang = current;
+  }, [current]);
 
   return (
     <div className={styles.switch} role="group" aria-label={t('lang.label')}>
@@ -19,12 +25,14 @@ export const LangSwitch = () => {
           className={styles.option}
           aria-pressed={lang === current}
           onClick={() => {
-            if (lang !== current) dispatch(langChanged(lang))
+            if (lang === current) return;
+            dispatch(langChanged(lang));
+            writeJson(LANG_STORAGE_KEY, lang);
           }}
         >
           {lang.toUpperCase()}
         </button>
       ))}
     </div>
-  )
-}
+  );
+};

@@ -1,88 +1,89 @@
-import { useId, useState, type KeyboardEvent } from 'react'
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { useT } from '../../i18n/useT'
-import { selectLang } from '../../i18n/i18nSlice'
-import { formatCoordinate, formatCountry } from '../../lib/format'
-import { locationSelected } from '../forecast/forecastSlice'
+import { useId, useState, type KeyboardEvent } from 'react';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useT } from '../../i18n/useT';
+import { selectLang } from '../../i18n/i18nSlice';
+import { formatCoordinate, formatCountry } from '../../lib/format';
+import { locationSelected } from '../forecast/forecastSlice';
 import {
   citiesRetryRequested,
   queryChanged,
+  searchFocused,
   selectCitiesStatus,
   selectQuery,
   selectSuggestions,
   selectSuggestionsQuery,
-} from './citiesSlice'
-import styles from './CitySearch.module.scss'
-import { normalize } from './search'
-import type { City } from './types'
+} from './citiesSlice';
+import styles from './CitySearch.module.scss';
+import { normalize } from './search';
+import type { City } from './types';
 
 const Highlighted = ({ name, query }: { name: string; query: string }) => {
-  const length = normalize(query).length
+  const length = normalize(query).length;
   return (
     <>
       <mark className={styles.mark}>{name.slice(0, length)}</mark>
       {name.slice(length)}
     </>
-  )
-}
+  );
+};
 
 export const CitySearch = () => {
-  const t = useT()
-  const lang = useAppSelector(selectLang)
-  const dispatch = useAppDispatch()
-  const id = useId()
-  const status = useAppSelector(selectCitiesStatus)
-  const query = useAppSelector(selectQuery)
-  const suggestions = useAppSelector(selectSuggestions)
-  const suggestionsQuery = useAppSelector(selectSuggestionsQuery)
-  const [open, setOpen] = useState(false)
-  const [active, setActive] = useState(-1)
+  const t = useT();
+  const lang = useAppSelector(selectLang);
+  const dispatch = useAppDispatch();
+  const id = useId();
+  const status = useAppSelector(selectCitiesStatus);
+  const query = useAppSelector(selectQuery);
+  const suggestions = useAppSelector(selectSuggestions);
+  const suggestionsQuery = useAppSelector(selectSuggestionsQuery);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState(-1);
 
-  const listId = `${id}-list`
-  const optionId = (index: number) => `${id}-option-${String(index)}`
-  const settled = status === 'ready' && suggestionsQuery === query
-  const showEmpty = settled && suggestions.length === 0 && normalize(query).length >= 2
-  const expanded = open && (suggestions.length > 0 || showEmpty)
+  const listId = `${id}-list`;
+  const optionId = (index: number) => `${id}-option-${String(index)}`;
+  const settled = status === 'ready' && suggestionsQuery === query;
+  const showEmpty = settled && suggestions.length === 0 && normalize(query).length >= 2;
+  const expanded = open && (suggestions.length > 0 || showEmpty);
 
   const select = (city: City) => {
-    dispatch(locationSelected({ kind: 'city', city }))
-    setOpen(false)
-    setActive(-1)
-  }
+    dispatch(locationSelected({ kind: 'city', city }));
+    setOpen(false);
+    setActive(-1);
+  };
 
   const move = (step: 1 | -1) => {
-    const count = suggestions.length
-    setOpen(true)
-    if (count === 0) return
-    if (active === -1) setActive(step === 1 ? 0 : count - 1)
-    else setActive((active + step + count) % count)
-  }
+    const count = suggestions.length;
+    setOpen(true);
+    if (count === 0) return;
+    if (active === -1) setActive(step === 1 ? 0 : count - 1);
+    else setActive((active + step + count) % count);
+  };
 
   const onKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     switch (event.key) {
       case 'ArrowDown':
-        event.preventDefault()
-        move(1)
-        break
+        event.preventDefault();
+        move(1);
+        break;
       case 'ArrowUp':
-        event.preventDefault()
-        move(-1)
-        break
+        event.preventDefault();
+        move(-1);
+        break;
       case 'Enter': {
-        const city = suggestions[active]
+        const city = suggestions[active];
         if (expanded && city) {
-          event.preventDefault()
-          select(city)
+          event.preventDefault();
+          select(city);
         }
-        break
+        break;
       }
       case 'Escape':
-        if (expanded) setOpen(false)
-        else dispatch(queryChanged(''))
-        setActive(-1)
-        break
+        if (expanded) setOpen(false);
+        else dispatch(queryChanged(''));
+        setActive(-1);
+        break;
     }
-  }
+  };
 
   return (
     <div className={styles.search}>
@@ -104,16 +105,17 @@ export const CitySearch = () => {
         placeholder={t('search.placeholder')}
         value={query}
         onChange={(event) => {
-          dispatch(queryChanged(event.target.value))
-          setOpen(true)
-          setActive(-1)
+          dispatch(queryChanged(event.target.value));
+          setOpen(true);
+          setActive(-1);
         }}
         onFocus={(event) => {
-          event.target.select()
-          setOpen(true)
+          event.target.select();
+          dispatch(searchFocused());
+          setOpen(true);
         }}
         onBlur={() => {
-          setOpen(false)
+          setOpen(false);
         }}
         onKeyDown={onKeyDown}
       />
@@ -127,13 +129,13 @@ export const CitySearch = () => {
             aria-selected={index === active}
             className={styles.option}
             onMouseDown={(event) => {
-              event.preventDefault()
+              event.preventDefault();
             }}
             onClick={() => {
-              select(city)
+              select(city);
             }}
             onMouseMove={() => {
-              setActive(index)
+              setActive(index);
             }}
           >
             <span className={styles.name}>
@@ -152,7 +154,7 @@ export const CitySearch = () => {
       </ul>
 
       <div id={`${id}-status`} className={styles.status} aria-live="polite">
-        {status === 'loading' && t('search.loading')}
+        {status === 'loading' && <span className={styles.loading}>{t('search.loading')}</span>}
         {status === 'failed' && (
           <>
             {t('search.failed')}{' '}
@@ -163,5 +165,5 @@ export const CitySearch = () => {
         )}
       </div>
     </div>
-  )
-}
+  );
+};

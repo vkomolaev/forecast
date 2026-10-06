@@ -1,26 +1,27 @@
-import { useAppDispatch, useAppSelector } from '../../app/hooks'
-import { useT } from '../../i18n/useT'
-import { ForecastList } from './ForecastList'
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useT } from '../../i18n/useT';
+import { ForecastList } from './ForecastList';
 import {
   retryRequested,
   selectForecast,
   selectForecastError,
   selectForecastStatus,
   selectPlace,
-} from './forecastSlice'
-import styles from './ForecastPanel.module.scss'
+} from './forecastSlice';
+import styles from './ForecastPanel.module.scss';
 
 export const ForecastPanel = () => {
-  const t = useT()
-  const dispatch = useAppDispatch()
-  const status = useAppSelector(selectForecastStatus)
-  const forecast = useAppSelector(selectForecast)
-  const error = useAppSelector(selectForecastError)
-  const place = useAppSelector(selectPlace)
+  const t = useT();
+  const dispatch = useAppDispatch();
+  const status = useAppSelector(selectForecastStatus);
+  const forecast = useAppSelector(selectForecast);
+  const error = useAppSelector(selectForecastError);
+  const place = useAppSelector(selectPlace);
 
-  if (status === 'failed' && error) {
-    return (
-      <div className={styles.message} role="alert">
+  const failure = (className: string | undefined) =>
+    status === 'failed' &&
+    error && (
+      <div className={className} role="alert">
         <p>{t(`error.${error}`)}</p>
         {error !== 'missing-key' && (
           <button type="button" className={styles.retry} onClick={() => dispatch(retryRequested())}>
@@ -28,10 +29,20 @@ export const ForecastPanel = () => {
           </button>
         )}
       </div>
-    )
+    );
+
+  if (forecast) {
+    return (
+      <>
+        {failure(styles.banner)}
+        <ForecastList forecast={forecast} place={place} busy={status === 'loading'} />
+      </>
+    );
   }
 
-  if (!forecast && status === 'loading') {
+  if (status === 'failed' && error) return failure(styles.message);
+
+  if (status === 'loading') {
     return (
       <div className={styles.skeleton} aria-busy="true">
         <p className={styles.loadingText} role="status">
@@ -43,10 +54,8 @@ export const ForecastPanel = () => {
           <div key={index} className={styles.skeletonDay} />
         ))}
       </div>
-    )
+    );
   }
 
-  if (!forecast) return <p className={styles.message}>{t('emptyState')}</p>
-
-  return <ForecastList forecast={forecast} place={place} busy={status === 'loading'} />
-}
+  return <p className={styles.message}>{t('emptyState')}</p>;
+};

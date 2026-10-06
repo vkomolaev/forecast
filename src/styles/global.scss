@@ -9,17 +9,24 @@
     color-scheme: dark;
   }
 
-  --color-bg: light-dark(#f4f6f9, #11151b);
-  --color-surface: light-dark(#ffffff, #1b212a);
-  --color-text: light-dark(#1b2330, #e6ebf2);
-  --color-muted: light-dark(#5b6676, #9aa6b6);
-  --color-border: light-dark(#dde3ea, #2c3440);
-  --color-accent: light-dark(#1f6feb, #58a6ff);
-  --color-on-accent: light-dark(#ffffff, #0d1117);
-  --color-warm: light-dark(#d9480f, #ff8a50);
-  --color-error: light-dark(#c92a2a, #ff6b6b);
+  --color-bg: light-dark(#e6eae7, #182033);
+  --color-surface: light-dark(#f6f7f3, #222b42);
+  --color-text: light-dark(#1e2b36, #e8e5f0);
+  --color-muted: light-dark(#56636b, #a5a3bd);
+  --color-border: light-dark(#cdd4cf, #343e5a);
+  --color-accent: light-dark(#6a3d74, #a9b6f2);
+  --color-on-accent: light-dark(#ffffff, #182033);
+  --color-warm: light-dark(#c4502c, #f08a5d);
+  --color-error: light-dark(#b42318, #ff8a80);
+  --icon-outline: light-dark(rgb(30 43 54 / 0.5), transparent);
 
-  --radius: 12px;
+  --temp-cold: light-dark(#5a7fd4, #7d9be6);
+  --temp-mild: light-dark(#7db5a2, #8fcab6);
+  --temp-warm: light-dark(#f0a458, #f5b673);
+  --temp-hot: light-dark(#dd5f3b, #ee7a55);
+
+  --radius: 22px;
+  --radius-inner: 12px;
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -27,7 +34,8 @@
   --space-6: 24px;
   --space-8: 32px;
 
-  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Nunito Variable', system-ui, sans-serif;
+  --font-display: 'Fredoka Variable', 'Nunito Variable', system-ui, sans-serif;
 }
 
 *,
@@ -49,7 +57,9 @@ body {
 h1,
 h2,
 h3 {
-  line-height: 1.2;
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.15;
 }
 
 :focus-visible {
