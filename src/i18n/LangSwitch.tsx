@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import { writeJson } from '../lib/storage';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { LANGS } from './i18n';
@@ -10,10 +9,6 @@ export const LangSwitch = () => {
   const t = useT();
   const dispatch = useAppDispatch();
   const current = useAppSelector(selectLang);
-
-  useEffect(() => {
-    document.documentElement.lang = current;
-  }, [current]);
 
   return (
     <div className={styles.switch} role="group" aria-label={t('lang.label')}>

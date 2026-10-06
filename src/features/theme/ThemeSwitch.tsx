@@ -1,11 +1,9 @@
-import { useEffect, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { useT } from '../../i18n/useT';
 import styles from '../../styles/Segmented.module.scss';
 import { writeJson } from '../../lib/storage';
 import { selectTheme, themeChanged, THEMES, THEME_STORAGE_KEY, type Theme } from './themeSlice';
-
-const BROWSER_BAR = { light: '#f4f6f9', dark: '#11151b' };
 
 const ICONS: Record<Theme, ReactNode> = {
   system: (
@@ -27,18 +25,6 @@ export const ThemeSwitch = () => {
   const t = useT();
   const dispatch = useAppDispatch();
   const current = useAppSelector(selectTheme);
-
-  useEffect(() => {
-    const root = document.documentElement;
-    if (current === 'system') delete root.dataset.theme;
-    else root.dataset.theme = current;
-
-    // A manual choice overrides both system-specific theme-color tags.
-    document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((meta) => {
-      const scheme = meta.media.includes('dark') ? 'dark' : 'light';
-      meta.content = BROWSER_BAR[current === 'system' ? scheme : current];
-    });
-  }, [current]);
 
   return (
     <div className={styles.switch} role="group" aria-label={t('theme.label')}>
