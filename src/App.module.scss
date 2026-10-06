@@ -1,0 +1,16 @@
+@use './styles/breakpoints' as bp;
+
+.app {
+  max-width: 960px;
+  margin-inline: auto;
+  padding: var(--space-4);
+
+  @include bp.from(bp.$md) {
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+.title {
+  margin: 0;
+  font-size: 1.75rem;
+}
